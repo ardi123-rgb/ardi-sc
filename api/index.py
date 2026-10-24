@@ -179,8 +179,11 @@ def generate_acc(region="ID"):
 @app.get("/api/gen")
 @app.get("/gen")
 def api_generate(region: str = "ID"):
-    acc = generate_acc(region=region)
-    if acc:
-        return {"status": "success", "accounts": [acc]}
-    else:
-        raise HTTPException(status_code=500, detail="Gagal generate akun")
+    try:
+        acc = generate_acc(region=region)
+        if acc:
+            return {"status": "success", "accounts": [acc]}
+        else:
+            return {"status": "error", "message": "Garena nolak (IP Vercel diblokir)"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
